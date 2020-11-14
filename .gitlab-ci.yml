@@ -1,0 +1,6 @@
+image: twobrowin/runners:kubectl-buildah
+
+deploy:
+  script:
+  - kubectl --kubeconfig $KUBECTL_CONFIG --token $KUBECTL_USER_TOCKEN apply -f cloud-modeling-backend.yaml
+  - kubectl --kubeconfig $KUBECTL_CONFIG --token $KUBECTL_USER_TOCKEN apply -f cloud-modeling.yaml
