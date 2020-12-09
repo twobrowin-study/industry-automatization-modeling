@@ -1,6 +1,21 @@
-image: twobrowin/runners:kubectl-buildah
+image: twobrowin/runners:alpine-kubectl-buildah-envsubst
+
+stages:
+- envsubst
+- deploy
+
+envsubst:
+  stage: envsubst
+  script:
+  - envsubst <cloud-modeling-backend.yaml >cloud-modeling-backend-PREPARED.yaml
+  - envsubst <cloud-modeling.yaml >cloud-modeling-PREPARED.yaml
+  artifacts:
+    paths:
+    - cloud-modeling-backend-PREPARED.yaml
+    - cloud-modeling-PREPARED.yaml
+    expire_in: 30 minutes
 
 deploy:
   script:
-  - kubectl --kubeconfig $KUBECTL_CONFIG --token $KUBECTL_USER_TOCKEN apply -f cloud-modeling-backend.yaml
-  - kubectl --kubeconfig $KUBECTL_CONFIG --token $KUBECTL_USER_TOCKEN apply -f cloud-modeling.yaml
+  - kubectl --kubeconfig $KUBECTL_CONFIG --token $KUBECTL_USER_TOCKEN apply --record -f cloud-modeling-backend-PREPARED.yaml
+  - kubectl --kubeconfig $KUBECTL_CONFIG --token $KUBECTL_USER_TOCKEN apply --record -f cloud-modeling-PREPARED.yaml
