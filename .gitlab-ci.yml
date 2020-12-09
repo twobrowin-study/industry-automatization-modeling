@@ -7,8 +7,8 @@ stages:
 envsubst:
   stage: envsubst
   script:
-  - envsubst <cloud-modeling-backend.yaml >cloud-modeling-backend-PREPARED.yaml
-  - envsubst <cloud-modeling.yaml >cloud-modeling-PREPARED.yaml
+  - envsubst -i cloud-modeling-backend.yaml -o cloud-modeling-backend-PREPARED.yaml
+  - envsubst -i cloud-modeling.yaml -o cloud-modeling-PREPARED.yaml
   artifacts:
     paths:
     - cloud-modeling-backend-PREPARED.yaml
