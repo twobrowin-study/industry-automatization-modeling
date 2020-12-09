@@ -16,6 +16,7 @@ envsubst:
     expire_in: 30 minutes
 
 deploy:
+  stage: deploy
   script:
   - kubectl --kubeconfig $KUBECTL_CONFIG --token $KUBECTL_USER_TOCKEN apply --record -f cloud-modeling-backend-PREPARED.yaml
   - kubectl --kubeconfig $KUBECTL_CONFIG --token $KUBECTL_USER_TOCKEN apply --record -f cloud-modeling-PREPARED.yaml
