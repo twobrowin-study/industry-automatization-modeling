@@ -7,16 +7,16 @@ stages:
 envsubst:
   stage: envsubst
   script:
-  - envsubst -i cloud-modeling-backend.yaml -o cloud-modeling-backend-PREPARED.yaml
-  - envsubst -i cloud-modeling.yaml -o cloud-modeling-PREPARED.yaml
+  - envsubst -i cloud-modeling-backend.yaml -o cloud-modeling-backend-${CI_COMMIT_BRANCH}-${CI_COMMIT_SHORT_SHA}.yaml
+  - envsubst -i cloud-modeling.yaml -o cloud-modeling-${CI_COMMIT_BRANCH}-${CI_COMMIT_SHORT_SHA}.yaml
   artifacts:
     paths:
-    - cloud-modeling-backend-PREPARED.yaml
-    - cloud-modeling-PREPARED.yaml
+    - cloud-modeling-backend-${CI_COMMIT_BRANCH}-${CI_COMMIT_SHORT_SHA}.yaml
+    - cloud-modeling-${CI_COMMIT_BRANCH}-${CI_COMMIT_SHORT_SHA}.yaml
     expire_in: 30 minutes
 
 deploy:
   stage: deploy
   script:
-  - kubectl --kubeconfig $KUBECTL_CONFIG --token $KUBECTL_USER_TOCKEN apply --record -f cloud-modeling-backend-PREPARED.yaml
-  - kubectl --kubeconfig $KUBECTL_CONFIG --token $KUBECTL_USER_TOCKEN apply --record -f cloud-modeling-PREPARED.yaml
+  - kubectl --kubeconfig $KUBECTL_CONFIG --token $KUBECTL_USER_TOCKEN apply --record -f cloud-modeling-backend-${CI_COMMIT_BRANCH}-${CI_COMMIT_SHORT_SHA}.yaml
+  - kubectl --kubeconfig $KUBECTL_CONFIG --token $KUBECTL_USER_TOCKEN apply --record -f cloud-modeling-${CI_COMMIT_BRANCH}-${CI_COMMIT_SHORT_SHA}.yaml
